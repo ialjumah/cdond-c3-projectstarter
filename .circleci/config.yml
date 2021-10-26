@@ -47,7 +47,7 @@ jobs:
     steps:
       # Checkout code from git
       # Restore from cache
-       - checkout
+      - checkout
       - restore_cache:
           keys: [frontend-build]
       - run:
