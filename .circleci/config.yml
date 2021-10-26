@@ -85,7 +85,7 @@ scan-frontend:
       # Restore from cache
       # Your job code here
     - checkout
-      - restore_cache:
+    - restore_cache:
           keys: [frontend-build]
       - run:
           name: Build front-end
