@@ -89,7 +89,7 @@ scan-frontend:
           keys: [frontend-build]
       - run:
           name: Build front-end
-          command: |
+          command: 
             # Your code here
             cd frontend
             npm install            
