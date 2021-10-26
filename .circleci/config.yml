@@ -106,8 +106,8 @@ scan-backend:
       # Your job code here 
     - checkout
     - restore_cache:
-          keys: [backend-build]
-      - run:
+        keys: [backend-build]
+    - run:
           name: Build back-end
           command: |
             # Your code here
