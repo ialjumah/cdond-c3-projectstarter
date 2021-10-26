@@ -114,7 +114,7 @@ scan-backend:
             cd backend
             npm install 
            # npm install oauth-sign@^0.9.0
-            npm audit --audit-level=critical        
+             npm audit --audit-level=critical        
 
 workflows:
   default:
@@ -125,9 +125,9 @@ workflows:
            requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-       - scan-backend:
+      - scan-backend:
            requires: [build-backend]
-       - scan-frontend:
+      - scan-frontend:
            requires: [build-frontend]
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
