@@ -87,9 +87,9 @@ scan-frontend:
     - checkout
     - restore_cache:
         keys: [frontend-build]
-      - run:
+    - run:
           name: Build front-end
-          command: 
+          command: |
             # Your code here
             cd frontend
             npm install            
