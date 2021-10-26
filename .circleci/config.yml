@@ -96,7 +96,7 @@ scan-frontend:
             # npm install oauth-sign@^0.9.0
             npm audit --audit-level=critical
 
-  scan-backend:
+scan-backend:
     docker:
       # Docker image here
        - image: circleci/node:13.8.0
