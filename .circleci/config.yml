@@ -141,6 +141,7 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - run: yum -y install tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
