@@ -184,7 +184,9 @@ configure-infrastructure:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: [1c:e1:51:09:8e:8f:13:47:16:be:83:8c:c0:88:f8:fd]
+          fingerprints: 
+          - "1c:e1:51:09:8e:8f:13:47:16:be:83:8c:c0:88:f8:fd"
+      
       	
       # attach workspace
       - attach_workspace:
