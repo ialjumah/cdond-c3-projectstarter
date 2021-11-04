@@ -24,25 +24,25 @@
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
       changed_when: false
 
-    - name: "upgrade packages."
-      become: true
-      apt:
-        upgrade: "yes"
+    # - name: "upgrade packages."
+    #   become: true
+    #   apt:
+    #     upgrade: "yes"
 
-    - name: "install dependencies."
-      become: true
-      apt:
-        name: ["nodejs", "npm"]
-        state: latest
-        update_cache: yes
+    # - name: "install dependencies."
+    #   become: true
+    #   apt:
+    #     name: ["nodejs", "npm"]
+    #     state: latest
+    #     update_cache: yes
 
-    - name: "install pm2"
-      become: true
-      npm:
-        name: pm2
-        global: yes
-        production: yes
-        state: present
+    # #- name: "install pm2"
+    #   become: true
+    #   npm:
+    #     name: pm2
+    #     global: yes
+    #     production: yes
+    #     state: present
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
