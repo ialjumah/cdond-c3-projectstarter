@@ -254,11 +254,11 @@ run-migrations:
         #     command: |
         #       curl -sL https://rpm.nodesource.com/setup_12.x | bash -
         #       yum -y install nodejs npm tar gzip jq git
-        - run:
-            name: Run migrations
-            no_output_timeout: 20m
-            working_directory: ./backend
-            command: |
+      - run:
+          name: Run migrations
+          no_output_timeout: 20m
+          working_directory: ./backend
+          command: |
               npm i
               sudo npm install pm2 -g
               echo ENVIRONMENT=production > ".env"
@@ -276,19 +276,19 @@ run-migrations:
               cat migration.log
               migration_succesful=$(cat migration.log | grep -c "has been executed successfully")
               if [ $migration_succesful > 0 ]; then exit 0; else exit 1; fi;
-        - run:
-            name: Send migration results to memstash
-            command: |
+      - run:
+          name: Send migration results to memstash
+          command: |
               curl -H "Content-Type: text/plain" \
-                -H "token: 76f9514c-4cdd-4658-88f9-d7a705af6604" \
-                --request PUT --data "1" \
-                https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
-        # Here's where you will add some code to rollback on failure
-        # - run:
-        #     name: Revert migrations
-        #     when: on_fail
-        - revert-migrations
-        - destroy-environment 
+              -H "token: 76f9514c-4cdd-4658-88f9-d7a705af6604" \
+              --request PUT --data "1" \
+              https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+      # Here's where you will add some code to rollback on failure
+      # - run:
+      #     name: Revert migrations
+      #     when: on_fail
+      - revert-migrations
+      - destroy-environment 
 
 workflows:
   default:
