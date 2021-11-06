@@ -203,7 +203,7 @@ jobs:
         # Add ssh keys with fingerprint
         - add_ssh_keys:
             fingerprints: 
-            - "01:71:48:e7:02:c3:28:6c:36:0e:ce:06:31:fe:52:2a"
+              - "01:71:48:e7:02:c3:28:6c:36:0e:ce:06:31:fe:52:2a"
         
           
         # attach workspace
