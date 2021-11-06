@@ -254,12 +254,12 @@ jobs:
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
-      - run:
+        - run:
           name: Install dependencies
           command: |
             sudo apt update
             sudo apt install -y awscli
-      - run:
+        - run:
           name: Run migrations
           command: |
             cd backend
@@ -271,11 +271,11 @@ jobs:
             migration_succesful=$(cat migration.log | grep -c "has been executed successfully")
             if [ $migration_succesful > 0 ]; then exit 0; else exit 1; fi;
         - run:
-            name: Send migration results to memstash
-            command: |
-              curl -H "Content-Type: text/plain" \
-                -H "token: 76f9514c-4cdd-4658-88f9-d7a705af6604" \
-                --request PUT --data "1" \
+          name: Send migration results to memstash
+          command: |
+            curl -H "Content-Type: text/plain" \
+            -H "token: 76f9514c-4cdd-4658-88f9-d7a705af6604" \
+              --request PUT --data "1" \
                 https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
         # Here's where you will add some code to rollback on failure
         # - run:
