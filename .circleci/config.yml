@@ -203,7 +203,7 @@ jobs:
         # Add ssh keys with fingerprint
         - add_ssh_keys:
             fingerprints: 
-            - "1c:e1:51:09:8e:8f:13:47:16:be:83:8c:c0:88:f8:fd"
+            - "01:71:48:e7:02:c3:28:6c:36:0e:ce:06:31:fe:52:2a"
         
           
         # attach workspace
@@ -229,17 +229,17 @@ jobs:
             
       # Here's where you will add some code to rollback on failure 
 
-  run-migrations:
-      docker:
-        # Docker image here that supports NodeJS
-        - image: circleci/node:13.8.0
-      steps:
-        # Checkout code from git
-        - checkout
-        - attach_workspace:
-            at: ~/
-        - restore_cache:
-            key: backend-build
+run-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          key: backend-build
         - run:
             name: Install AWS CLI dependencies
             working_directory: /tmp
