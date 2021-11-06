@@ -260,8 +260,8 @@ jobs:
             sudo apt update
             sudo apt install -y awscli
         - run:
-          name: Run migrations
-          command: |
+           name: Run migrations
+           command: |
             cd backend
             npm install
             npm run build
