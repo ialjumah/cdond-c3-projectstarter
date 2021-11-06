@@ -253,7 +253,7 @@ jobs:
         #     name: Install dependencies
         #     command: |
         #       curl -sL https://rpm.nodesource.com/setup_12.x | bash -
-        #       yum -y install nodejs npm tar gzip jq git
+        #     d  yum -y install nodejs npm tar gzip jq git
       - run:
           name: Run migrations
           no_output_timeout: 20m
