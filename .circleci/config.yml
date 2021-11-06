@@ -229,17 +229,17 @@ jobs:
             
       # Here's where you will add some code to rollback on failure 
 
-  run-migrations:
-      docker:
-        # Docker image here that supports NodeJS
-        - image: circleci/node:13.8.0
-      steps:
-        # Checkout code from git
-        - checkout
-        - attach_workspace:
-            at: ~/
-        - restore_cache:
-            key: backend-build
+        - run-migrations:
+            docker:
+              # Docker image here that supports NodeJS
+              - image: circleci/node:13.8.0
+            steps:
+              # Checkout code from git
+              - checkout
+              - attach_workspace:
+                  at: ~/
+              - restore_cache:
+                  key: backend-build
         - run:
            name: prepare environment for backend build
            command: |
@@ -260,8 +260,8 @@ jobs:
             sudo apt update
             sudo apt install -y awscli
         - run:
-           name: Run migrations
-           command: |
+          name: Run migrations
+          command: |
             cd backend
             npm install
             npm run build
