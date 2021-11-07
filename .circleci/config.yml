@@ -290,6 +290,34 @@ jobs:
       - revert-migrations
       - destroy-environment 
 
+  # Docker image here that supports AWS CLI
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install  AWS CLI dependencies
+          working_directory: /temp
+          command: |
+            # your code here
+            sudo apt-get update && sudo apt-get install -yy less
+            sudo apt-get install unzip -y
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      
+      - run:
+          name: Install dependencies
+          command: |
+            cd frontend
+            npm i
+
+       
+
 workflows:
   default:
     jobs:
@@ -312,7 +340,7 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
+      - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
       #     requires: [run-migrations]
