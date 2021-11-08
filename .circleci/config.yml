@@ -223,11 +223,25 @@ jobs:
             name: Configure server
             command: |
               # Your code here
+              echo NODE_ENV=production > "backend/.env"
+              echo ENVIRONMENT=production >> "backend/.env"
+              echo VERSION=1 >> "backend/.env"
+              echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
+              echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> "backend/.env"
+              echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> "backend/.env"
+              echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> "backend/.env"
+              echo TYPEORM_HOST=1 >> "backend/.env"
+              echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+              echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+              echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+              echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+              export ANSIBLE_HOST_KEY_CHECKING=False
+              ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
                 
               
 
-              cd .circleci/ansible
-              ansible-playbook -i inventory.txt configure-server.yml
+             # cd .circleci/ansible
+              #ansible-playbook -i inventory.txt configure-server.yml
             
       # Here's where you will add some code to rollback on failure 
 
