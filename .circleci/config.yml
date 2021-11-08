@@ -6,7 +6,9 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      # Add parameter here  
+      workflowId:
+            type: string 
     steps:
       - run:
           name: Destroy environments
@@ -289,7 +291,7 @@ jobs:
       #     name: Revert migrations
       #     when: on_fail
       - revert-migrations
-      - destroy-environment 
+      - destroy-environment: 
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
 
   # Docker image here that supports AWS CLI
