@@ -322,6 +322,8 @@ jobs:
       # Checkout code from git
       - attach_workspace:
           at: ~/
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install  AWS CLI dependencies
           #working_directory: /temp
@@ -333,14 +335,15 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
 
+
       #- run: apt-get install tar gzip
-      - run:
-          name: Install dependencies
-          working_directory: ~/project/.circleci/frontend
-          command: |
-            #cd frontend
-            npm i
-            npm run build
+      # - run:
+      #     name: Install dependencies
+      #     working_directory: ~/project/.circleci/frontend
+      #     command: |
+      #       #cd frontend
+      #       #npm i
+      #       #npm run build
 
       - run:
           name: Deploy frontend objects to S3
@@ -349,6 +352,20 @@ jobs:
             # your code here
             aws s3 cp ./dist "s3://udacitydevops-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
 
+      - run:
+          name: Build the frontend
+          working_directory: ~/project/.circleci/frontend
+
+          command: |
+            PUBLIC_DNS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-ecce3e6" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            echo ${PUBLIC_DNS}
+            export API_URL="http://${PUBLIC_DNS}:3030"
+            echo API_URL=${API_URL}
+            #cd frontend
+            npm install
+            npm run build
+
+            
 
        
 
