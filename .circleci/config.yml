@@ -345,12 +345,7 @@ jobs:
       #       #npm i
       #       #npm run build
 
-      - run:
-          name: Deploy frontend objects to S3
-          working_directory: ~/project/frontend
-          command: |
-            # your code here
-            aws s3 cp ./dist "s3://udacitydevops-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+      
 
       - run:
           name: Build the frontend
@@ -364,6 +359,12 @@ jobs:
             #cd frontend
             npm install
             npm run build
+      - run:
+          name: Deploy frontend objects to S3
+          working_directory: ~/project/frontend
+          command: |
+            # your code here
+            aws s3 cp ./dist "s3://udacitydevops-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
 
             
 
