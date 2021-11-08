@@ -357,6 +357,8 @@ jobs:
             echo ${PUBLIC_DNS}
             export API_URL="http://${PUBLIC_DNS}:3030"
             echo API_URL=${API_URL}
+            pwd
+            ls
             #cd frontend
             npm install
             npm run build
