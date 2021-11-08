@@ -62,6 +62,7 @@ jobs:
           root: ~/
           paths:
             - project/frontend/node_modules
+            - project/frontend/package.json
 
 
   build-backend:
