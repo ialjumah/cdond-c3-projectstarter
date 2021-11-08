@@ -275,6 +275,7 @@ jobs:
         #       curl -sL https://rpm.nodesource.com/setup_12.x | bash -
         #     d  yum -y install nodejs npm tar gzip jq git 
       - run:
+          #npm run migrations:revert
           name: Run migrations
           no_output_timeout: 20m
           working_directory: ./backend
@@ -330,12 +331,14 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-      
+            
+      - run: apt-get install tar gzip
       - run:
           name: Install dependencies
           command: |
             cd frontend
             npm i
+            
 
        
 
