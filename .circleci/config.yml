@@ -353,7 +353,7 @@ jobs:
           working_directory: ~/project/frontend
 
           command: |
-            PUBLIC_DNS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-ecce3e6" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            PUBLIC_DNS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             echo ${PUBLIC_DNS}
             export API_URL="http://${PUBLIC_DNS}:3030"
             echo API_URL=${API_URL}
@@ -366,7 +366,8 @@ jobs:
           command: |
             # your code here
             aws s3 cp ./dist "s3://udacitydevops-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-
+      - destroy-environment: 
+          workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
             
 
        
