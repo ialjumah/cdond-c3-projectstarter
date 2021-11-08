@@ -221,6 +221,8 @@ jobs:
               
         - run:
             name: Configure server
+            working_directory: ~/project/.circleci/ansible
+
             command: |
               # Your code here
               echo NODE_ENV=production > "backend/.env"
@@ -236,7 +238,7 @@ jobs:
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
               export ANSIBLE_HOST_KEY_CHECKING=False
-              ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+              ansible-playbook -i inventory.txt  configure-server.yml
                 
         - destroy-environment:
             workflowId: ${CIRCLE_WORKFLOW_ID:0:7}   
@@ -340,16 +342,16 @@ jobs:
 workflows:
   default:
     jobs:
-      #- build-frontend
-      #- build-backend
-      #- test-frontend:
-      #    requires: [build-frontend]
-      #- test-backend:
-      #    requires: [build-backend]
-      #- scan-backend:
-      #    requires: [build-backend]
-      #- scan-frontend:
-      #    requires: [build-frontend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+         requires: [build-frontend]
+      - test-backend:
+         requires: [build-backend]
+      - scan-backend:
+         requires: [build-backend]
+      - scan-frontend:
+         requires: [build-frontend]
       - deploy-infrastructure:
          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
