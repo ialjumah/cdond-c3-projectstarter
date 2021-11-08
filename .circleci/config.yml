@@ -313,14 +313,14 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - attach_workspace:
           at: ~/
       - run:
           name: Install  AWS CLI dependencies
-          working_directory: /temp
+          #working_directory: /temp
           command: |
             # your code here
             sudo apt-get update && sudo apt-get install -yy less
