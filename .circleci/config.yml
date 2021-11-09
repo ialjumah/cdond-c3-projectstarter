@@ -48,7 +48,7 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Build front-end
+          name: Build front-end/
           command: |
             # Your code here
             cd frontend
