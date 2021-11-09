@@ -61,8 +61,8 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/frontend/node_modules
-            - project/frontend/package.json
+            - project/frontend/
+            #- project/frontend/package.json
 
 
   build-backend:
