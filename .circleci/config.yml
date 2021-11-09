@@ -230,7 +230,7 @@ jobs:
               
         - run:
             name: Configure server
-            #working_directory: ~/project/.circleci/ansible do not use it
+            # working_directory: ~/project/.circleci/ansible do not use it
 
             command: |
               #Your code here
