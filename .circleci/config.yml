@@ -509,9 +509,9 @@ workflows:
           requires: [run-migrations]
          # requires: [configure-infrastructure] do not use it
       - deploy-backend:
-          requires: [run-migrations] 
+          requires: [run-migrations ] 
       - smoke-test:
-          requires: [deploy-backend}
+          requires: [deploy-backend] 
           #deploy-frontend]
       # - cloudfront-update:
       #     requires: [smoke-test]
