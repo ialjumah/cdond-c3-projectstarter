@@ -61,7 +61,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/frontend/
+            - project/frontend
             #- project/frontend/package.json
 
 
