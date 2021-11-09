@@ -192,7 +192,7 @@ jobs:
           command: |
             # Your code here
             echo "[web]" > .circleci/ansible/inventory.txt
-            aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-7af54af" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
             #--query 'Reservations[*].Instances[*].PublicIpAddress' \
             #--filters "Name=tag:project,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             #--output text >> .circleci/ansible/inventory.txt
