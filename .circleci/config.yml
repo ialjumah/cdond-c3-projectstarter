@@ -196,6 +196,13 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:project,Values=udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            # BACKEND_AWS_PUBLIC_IP=$(aws ec2 describe-instances \
+            # --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
+            # --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            #   --output text)
+
+
 
       - persist_to_workspace:
           root: ~/
