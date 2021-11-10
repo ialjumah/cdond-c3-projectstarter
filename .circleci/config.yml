@@ -451,7 +451,7 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image 
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:13.8.0  #python:3.7-alpine3.11
     steps:
       # Checkout code from git
       - checkout 
@@ -459,8 +459,10 @@ jobs:
           name: Install dependencies
           command: |
             # your code here            
-            pip install awscli
-            apk add --update curl nodejs npm
+            #pip install awscli
+            sudo apt update #apk add --update curl nodejs npm
+            sudo apt install -y awscli
+            sudo apt install -y python3 ansible
       - run:
           name: Backend smoke test.
           command: |
@@ -482,6 +484,21 @@ jobs:
       - destroy-environment:
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
+
+    # - run:
+    #       name: Frontend smoke test.
+    #       command: |
+    #         URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:6}.s3-website-us-east-1.amazonaws.com"
+    #         if curl -s ${URL} | grep "Welcome"
+    #         then
+    #           return 0
+    #         else
+    #           return 1
+    #         fi
+    #         sleep 20
+      
+    #   - revert-migrations
+    #   - destroy-environment
          
 workflows:
   default:
