@@ -478,11 +478,11 @@ jobs:
             else
               return 1
             fi
+            sleep 20
       - destroy-environment:
-            workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
+          workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-
-
+         
 workflows:
   default:
     jobs:
