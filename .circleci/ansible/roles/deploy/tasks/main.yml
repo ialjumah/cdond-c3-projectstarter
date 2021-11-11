@@ -1,41 +1,37 @@
-- name: Create app dir
-  become: yes
-  file:
-    path: /home/ubuntu/app
-    state: directory
 
-- name: "Copy backend build folder to EC2"
-  become: yes
-  unarchive:
-    src: /tmp/workspace/backend.tar.gz
-    dest: /home/ubuntu/app/
-    owner: ubuntu
+- name: "upgrade packages."
+  become: true
+  apt:
+    upgrade: "yes"
+- name: "install dependencies."
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    update_cache: yes
 
-- name: "Copy package.json to EC2"
-  become: yes
+- name: "copy backend file"
+  become: true
   copy:
-    src: /tmp/workspace/package.json
-    dest: /home/ubuntu/app/
-    owner: ubuntu
+    src: /root/project/backend
+    dest: /root
+    force: no
 
-- name: "NPM Install"
-  shell:
-    cmd: npm install --production
-    chdir: /home/ubuntu/app
+    
+- name: "install npm packages"
+  become: true
+  command: npm install --force
+  args:
+    chdir: /root/backend
 
-- name: "Start backend with pm2"
-  become: yes
-  shell: |
-    cd /home/ubuntu/app
-    pm2 start main.js --name app
-  environment:
-    ENVIRONMENT: production
-    TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
-    TYPEORM_MIGRATIONS_DIR: "./migrations"
-    TYPEORM_MIGRATIONS: "./migrations/*.js"
-    TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
-    TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
-    TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
-    TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
-    TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
-    TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+- name: "compile npm packages"
+  become: true
+  command: npm run build
+  args:
+    chdir: /root/backend
+
+
+- name: "start server"
+  become: true
+  command: pm2 start npm -- run start
+  args:
+    chdir: /root/backend/dist
