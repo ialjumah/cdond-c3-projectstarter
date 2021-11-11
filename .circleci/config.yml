@@ -446,44 +446,89 @@ jobs:
   #             --request GET https://api.memstash.io/values/UdapeopleDns)
   #           export BACKEND_STATUS="http://${BACKEND_IP}:3030/api/status"
   #           echo ${BACKEND_STATUS}
-  #           curl "http://${BACKEND_IP}:3030/api/status"      
+  #           curl "http://${BACKEND_IP}:3030/api/status"  
 
   smoke-test:
-    docker:
+    docker: 
+      - image: python:3.7-alpine3.11
       # Lightweight Docker image 
-      - image: circleci/node:13.8.0  #python:3.7-alpine3.11
     steps:
+      - checkout
       # Checkout code from git
-      - checkout 
       - run:
           name: Install dependencies
           command: |
-            # your code here            
-            #pip install awscli
-            sudo apt update #apk add --update curl nodejs npm
-            sudo apt install -y awscli
-            sudo apt install -y python3 ansible
+            #apt update
+            #apt upgrade
+            apk add --update curl
+            pip install --upgrade pip
+            pip install awscli
+            # your code here 
+
+      - attach_workspace:
+          at: ~/
+            # your code here
       - run:
-          name: Backend smoke test.
+          name: Frontend smoke test.
           command: |
-            # Fetch and prepare the BACKEND_IP env var
-            export BACKEND_IP=$(aws ec2 describe-instances --region us-east-1  \
-                --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-                --query "Reservations[].Instances[*].PublicIpAddress" \
-                --output text)
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
-            curl "${API_URL}/api/status"
-            if curl -v "${API_URL}/api/status" | grep "ok"
+            # your code here
+            URL="http://udapeople-u15ch1136f.s3-website-us-east-1.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
             then
-              return 0
+            return 0
             else
-              return 1
+            return 1
             fi
-            sleep 20
-      - destroy-environment:
-          workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations
+      - run:
+          name: Get backend url
+          command: |
+            BACKEND=$(curl -H "token: 7d785f18-ed4c-4b0a-b371-f672266ac661" --request GET https://api.memstash.io/values/backendurl)
+            if curl -s ${BACKEND}/api/status | grep "ok"
+            then
+            return 0
+            else
+            return 1
+            fi
+      - destroy-environment
+
+            
+       
+  # smoke-test:
+  #   docker:
+  #     # Lightweight Docker image 
+  #     - image: circleci/node:13.8.0  #python:3.7-alpine3.11
+  #   steps:
+  #     # Checkout code from git
+  #     - checkout 
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           # your code here            
+  #           #pip install awscli
+  #           sudo apt update #apk add --update curl nodejs npm
+  #           sudo apt install -y awscli
+  #           sudo apt install -y python3 ansible
+  #     - run:
+  #         name: Backend smoke test.
+  #         command: |
+  #           # Fetch and prepare the BACKEND_IP env var
+  #           export BACKEND_IP=$(aws ec2 describe-instances --region us-east-1  \
+  #               --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+  #               --query "Reservations[].Instances[*].PublicIpAddress" \
+  #               --output text)
+  #           export API_URL="http://${BACKEND_IP}:3030"
+  #           echo "${API_URL}"
+  #           curl "${API_URL}/api/status"
+  #           if curl -v "${API_URL}/api/status" | grep "ok"
+  #           then
+  #             return 0
+  #           else
+  #             return 1
+  #           fi
+  #           sleep 20
+  #     - destroy-environment:
+  #         workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
+  #     - revert-migrations
 
     # - run:
     #       name: Frontend smoke test.
