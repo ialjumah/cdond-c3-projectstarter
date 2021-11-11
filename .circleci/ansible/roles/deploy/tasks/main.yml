@@ -1,37 +1,25 @@
 
-- name: "upgrade packages."
-  become: true
-  apt:
-    upgrade: "yes"
-- name: "install dependencies."
-  become: true
-  apt:
-    name: ["nodejs", "npm"]
-    update_cache: yes
-
-- name: "copy backend file"
+- name: Testing copy of the local to remote file
   become: true
   copy:
-    src: /root/project/backend
-    dest: /root
-    force: no
+        src: artifact.tar.gz
+        dest: /home/ubuntu
 
-    
-- name: "install npm packages"
+- name: Creates directory
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+
+- name: Extract 'artifact.tar.gz' into '/home/ubuntu/backend'
+  ansible.builtin.unarchive:
+    src: artifact.tar.gz
+    dest: /home/ubuntu/backend
+
+- name: Executing node
   become: true
-  command: npm install --force
-  args:
-    chdir: /root/backend
-
-- name: "compile npm packages"
-  become: true
-  command: npm run build
-  args:
-    chdir: /root/backend
-
-
-- name: "start server"
-  become: true
-  command: pm2 start npm -- run start
-  args:
-    chdir: /root/backend/dist
+  shell: |   
+    cd /home/ubuntu/backend
+    npm install
+    npm run build   
+    pm2 stop default
+    pm2 start npm --name "backend" -- start
