@@ -420,7 +420,8 @@ jobs:
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
 
-              cat backend/.env
+              #cat backend/.env changed this line forthe below 
+              cat .env
 
               tar -C backend -czvf artifact.tar.gz .
               ls -la
