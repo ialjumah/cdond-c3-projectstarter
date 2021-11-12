@@ -333,7 +333,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
 
     steps:
       # Checkout code from git
@@ -522,17 +522,38 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
+            filters:
+              branches:
+                only: [master]
       - run-migrations:
           requires: [configure-infrastructure]
+            filters:
+              branches:
+                only: [master]
       - deploy-frontend:
           requires: [run-migrations]
+            filters:
+              branches:
+                only: [master]
          # requires: [configure-infrastructure] do not use it
       - deploy-backend:
           requires: [run-migrations ] 
+            filters:
+              branches:
+                only: [master]
       #- smoke-test:
-      #    requires: [deploy-backend, deploy-frontend] 
+      #    requires: [deploy-backend, deploy-frontend]
+      #     filters:
+      #         branches:
+      #           only: [master]
            
-      # - cloudfront-update:
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update] 
+      # # - cloudfront-update:
+      # #     requires: [smoke-test]
+      #     filters:
+      #         branches:
+      #           only: [master]
+      # # - cleanup:
+      # #     requires: [cloudfront-update] 
+      #     filters:
+      #         branches:
+      #           only: [master]
