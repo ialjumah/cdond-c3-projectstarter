@@ -423,7 +423,7 @@ jobs:
               #cat backend/.env changed this line forthe below 
               cat .env
 
-              tar -C backend -czvf artifact.tar.gz 
+              sudo tar -C backend -czvf artifact.tar.gz 
               ls -la
 
               cd .circleci/ansible
