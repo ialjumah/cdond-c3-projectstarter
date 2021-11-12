@@ -379,6 +379,7 @@ jobs:
             #cd frontend
             npm install
             npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
       - run:
           name: Deploy frontend objects to S3
           working_directory: ~/project/frontend
@@ -418,11 +419,21 @@ jobs:
               echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-              cd ../
-              zip -r backend.zip backend/
-              cat .circleci/ansible/inventory.txt
+
+              cat backend/.env
+
+              tar -C backend -czvf artifact.tar.gz .
+              ls -la
+
+              cd .circleci/ansible
+              cat inventory.txt
               export ANSIBLE_HOST_KEY_CHECKING=False
-              ansible-playbook -i  .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml --extra-vars="TYPEORM_HOST=$TYPEORM_HOST TYPEORM_PORT=$TYPEORM_PORT TYPEORM_USERNAME=$TYPEORM_USERNAME  TYPEORM_PASSWORD=$TYPEORM_PASSWORD TYPEORM_DATABASE=$TYPEORM_DATABASE"
+              ansible-playbook -i inventory.txt deploy-backend.yml
+              # cd ../
+              # zip -r backend.zip backend/
+              # cat .circleci/ansible/inventory.txt
+              # export ANSIBLE_HOST_KEY_CHECKING=False
+              # ansible-playbook -i  .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml --extra-vars="TYPEORM_HOST=$TYPEORM_HOST TYPEORM_PORT=$TYPEORM_PORT TYPEORM_USERNAME=$TYPEORM_USERNAME  TYPEORM_PASSWORD=$TYPEORM_PASSWORD TYPEORM_DATABASE=$TYPEORM_DATABASE"
         
         - destroy-environment:
             workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
