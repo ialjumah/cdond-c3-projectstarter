@@ -376,16 +376,20 @@ jobs:
             echo API_URL=${API_URL}
             pwd
             ls
-            #cd frontend
+            cd frontend
             npm install
             npm run build
-            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            tar -czvf 
+            #artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
       - run:
           name: Deploy frontend objects to S3
           working_directory: ~/project/frontend
           command: |
             # your code here
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+      - run:
+          name: Add tar
+          command: yum install -y tar
       - destroy-environment: 
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
             
