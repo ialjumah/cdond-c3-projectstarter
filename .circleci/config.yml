@@ -83,6 +83,13 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      
+      - persist_to_workspace:
+            root: ~/
+            paths:
+              - project/backend/dist
+              - project/backend/node_modules
+
 
   test-frontend:
     docker:
@@ -446,7 +453,8 @@ jobs:
               cd ~/project/.circleci/ansible
               cat inventory.txt
               export ANSIBLE_HOST_KEY_CHECKING=False
-              ansible-playbook -i inventory.txt deploy-backend.yml
+              ansible-playbook -i inventory.txt deploy-backend.yml -vv
+    
               # cd ../
               # zip -r backend.zip backend/
               # cat .circleci/ansible/inventory.txt
