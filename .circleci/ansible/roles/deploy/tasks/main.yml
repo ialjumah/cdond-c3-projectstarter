@@ -15,6 +15,13 @@
     path: ~/backend_app
     state: directory
 
+- name: "checking directory path"
+  become: yes
+  shell: |
+    cd ~/backend_app
+    pwd 
+    ls
+
 - name: "Copy compiled backend app"
   become: yes
   copy:
