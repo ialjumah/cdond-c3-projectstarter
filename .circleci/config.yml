@@ -333,7 +333,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
 
     steps:
       # Checkout code from git
@@ -368,18 +368,17 @@ jobs:
       - run:
           name: Build the frontend
           working_directory: ~/project/frontend
-
           command: |
-            PUBLIC_DNS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-            echo ${PUBLIC_DNS}
-            export API_URL="http://${PUBLIC_DNS}:3030"
+            BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+            echo ${BACKEND_IP}
+            export API_URL="http://${BACKEND_IP}:3030"
             echo API_URL=${API_URL}
             pwd
             ls
-            cd frontend
+            #cd frontend
             npm install
             npm run build
-            tar -czvf 
+            #tar -czvf 
             #artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
       - run:
           name: Deploy frontend objects to S3
@@ -387,9 +386,9 @@ jobs:
           command: |
             # your code here
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-      - run:
-          name: Add tar
-          command: yum install -y tar
+      # - run:
+      #     name: Add tar
+      #     command: yum install -y tar
       - destroy-environment: 
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
             
@@ -427,7 +426,7 @@ jobs:
               #cat backend/.env changed this line forthe below 
               cat .env
 
-              sudo tar -C backend -czvf artifact.tar.gz 
+              #tar -C backend -czvf artifact.tar.gz 
               ls -la
 
               cd .circleci/ansible
@@ -522,19 +521,19 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #    requires: [build-frontend]
-      # - test-backend:
-      #    requires: [build-backend]
-      # - scan-backend:
-      #    requires: [build-backend]
-      # - scan-frontend:
-      #    requires: [build-frontend]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+         requires: [build-frontend]
+      - test-backend:
+         requires: [build-backend]
+      - scan-backend:
+         requires: [build-backend]
+      - scan-frontend:
+         requires: [build-frontend]
       - deploy-infrastructure:
-          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
+         requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+         filters:
             branches:
               only: [master]
       - configure-infrastructure:
@@ -554,7 +553,7 @@ workflows:
               only: [master]
          # requires: [configure-infrastructure] do not use it
       - deploy-backend:
-          requires: [run-migrations ] 
+          requires: [run-migrations] 
           filters:
             branches:
               only: [master]
