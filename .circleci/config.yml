@@ -428,8 +428,22 @@ jobs:
 
               #tar -C backend -czvf artifact.tar.gz 
               ls -la
+              npm i
+              npm run build
+              cd dist
+              cp ../package.json .
+              zip -rq dist.zip *
+              mkdir -p ~/project/.circleci/ansible/roles/deploy-backend/files/
+              mv dist.zip ~/project/.circleci/ansible/roles/deploy-backend/files/
+              ls ~/project/.circleci/ansible/roles/deploy-backend/files/
 
-              cd .circleci/ansible
+
+
+
+
+
+
+              cd ../.circleci/ansible
               cat inventory.txt
               export ANSIBLE_HOST_KEY_CHECKING=False
               ansible-playbook -i inventory.txt deploy-backend.yml
