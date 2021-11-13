@@ -248,6 +248,7 @@ jobs:
 
             command: |
               #Your code here
+              touch ~/project/backend/.env
               echo NODE_ENV=production > "backend/.env"
               echo ENVIRONMENT=production >> "backend/.env"
               echo VERSION=1 >> "backend/.env"
