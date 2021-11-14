@@ -438,19 +438,13 @@ jobs:
               ls -la
               npm i
               npm run build
-              cd dist
-              cp ../package.json .
-              zip -rq dist.zip *
-              mkdir -p ~/project/.circleci/ansible/roles/deploy-backend/files/
-              mv dist.zip ~/project/.circleci/ansible/roles/deploy-backend/files/
-              ls ~/project/.circleci/ansible/roles/deploy-backend/files/
-
-
-
-
-
-
-
+#             cd dist
+#             cp ../package.json .
+              zip -rq dist.zip .
+              mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+              mv dist.zip ~/project/.circleci/ansible/roles/deploy/files/
+              ls ~/project/.circleci/ansible/roles/deploy/files/
+              pwd
               cd ~/project/.circleci/ansible
               cat inventory.txt
               export ANSIBLE_HOST_KEY_CHECKING=False
@@ -462,9 +456,9 @@ jobs:
               # export ANSIBLE_HOST_KEY_CHECKING=False
               # ansible-playbook -i  .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml --extra-vars="TYPEORM_HOST=$TYPEORM_HOST TYPEORM_PORT=$TYPEORM_PORT TYPEORM_USERNAME=$TYPEORM_USERNAME  TYPEORM_PASSWORD=$TYPEORM_PASSWORD TYPEORM_DATABASE=$TYPEORM_DATABASE"
         
-        - destroy-environment:
-            workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
-        - revert-migrations
+   #     - destroy-environment:
+   #         workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
+    #    - revert-migrations
 
   # smoke-test:
   #   docker:
