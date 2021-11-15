@@ -617,9 +617,9 @@ workflows:
               only: [master]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      #     filters:
-      #         branches:
-      #           only: [master]
+          filters:
+            branches:
+              only: [master]
            
       # # - cloudfront-update:
       # #     requires: [smoke-test]
