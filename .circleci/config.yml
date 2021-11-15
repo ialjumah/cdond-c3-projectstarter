@@ -552,11 +552,11 @@ jobs:
             curl -v "${API_URL}/api/status"
             if curl  -v "${API_URL}/api/status" | grep "ok"
             then
-              return 0
+               return 0
             else
-              return 1
+               return 1
             fi
-            sleep 20
+            
       - destroy-environment:
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
