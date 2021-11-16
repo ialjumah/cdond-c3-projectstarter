@@ -550,31 +550,31 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             curl -s "${API_URL}/api/status"
-#            if curl   "${API_URL}/api/status" | grep "ok"
-#            then
-#              return 0
-#            else
-#               return 1
-#            fi
+           if curl  -s "${API_URL}/api/status" | grep "ok"
+           then
+             exit 0
+           else
+              exit 1
+           fi
             
       - destroy-environment:
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
-    # - run:
-    #       name: Frontend smoke test.
-    #       command: |
-    #         URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:6}.s3-website-us-east-1.amazonaws.com"
-    #         if curl -s ${URL} | grep "Welcome"
-    #         then
-    #           return 0
-    #         else
-    #           return 1
-    #         fi
-    #         sleep 20
+    - run:
+          name: Frontend smoke test.
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:6}.s3-website-us-east-1.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
+            then
+              exit 0
+            else
+              exit 1
+            fi
+            sleep 20
       
-    #   - revert-migrations
-    #   - destroy-environment
+      - revert-migrations
+      - destroy-environment
          
 workflows:
   default:
