@@ -15,7 +15,7 @@ commands:
           when: on_fail
           command: |
             # Your code here
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+            aws s3 rb s3://udapeople-<<parameters.workflowId>>
             aws cloudformation delete-stack  --stack-name udapeople-backend-<<parameters.workflowId>>
             aws cloudformation delete-stack  --stack-name udapeople-frontend-<<parameters.workflowId>>
 
