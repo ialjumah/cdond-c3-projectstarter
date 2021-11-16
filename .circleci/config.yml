@@ -561,16 +561,17 @@ jobs:
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
-    # - run:
-    #       name: Frontend smoke test.
-    #       command: |
-    #         URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:6}.s3-website-us-east-1.amazonaws.com"
-    #         if curl -s ${URL} | grep "Welcome"
-    #         then
-    #           exit 0
-    #         else
-    #           exit 1
-    #         fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:6}.s3-website-us-east-1.amazonaws.com"
+            if curl -s ${URL} | grep "Welcome"
+            then
+              exit 0
+            else
+              exit 1
+            fi
+
             
       
     #   - revert-migrations
