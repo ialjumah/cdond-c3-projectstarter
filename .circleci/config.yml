@@ -575,6 +575,61 @@ jobs:
           workflowId: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
+  cloudfront-update:
+      docker:
+        # Docker image here that supports AWS CLI
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              yum install tar -y
+              yum install gzip -y
+              yum install python3-pip -y
+              yum -y install curl -y
+              curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+              yum install -y nodejs
+        - run:
+            name: Update cloudfront distribution
+            command: |
+              set TERM=xterm
+              echo "PATH"
+              pwd
+              #aws cloudformation deploy --template-file /root/project/.circleci/files/cloudfront.yml --stack-name udapeople-cloudfront --parameter-overrides WorkflowID="d3hxlpgu" --region us-west-1
+              aws cloudformation list-exports \
+              --query "Exports[?Name=='WorkflowID'].Value" \
+              --no-paginate \
+              --output text > ./.circleci/ansible/originalWorkflowID.txt
+              if [ -s "./.circleci/ansible/originalWorkflowID.txt" ]
+              then
+                cat ./.circleci/ansible/originalWorkflowID.txt
+                originalWorkflowID=`cat ./.circleci/ansible/originalWorkflowID.txt`
+              else
+                echo "New stack will be created"
+              fi
+              if [ -n "$originalWorkflowID" ]
+              then
+                echo $originalWorkflowID
+                StackOption=update-stack
+                StackName="cloudfront"
+              else
+                StackOption=create-stack
+                StackName=udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+              fi
+              aws cloudformation $StackOption \
+              --stack-name $StackName \
+              --template-body file://./.circleci/files/cloudfront.yml \
+              --parameter ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7} \
+              --tags Key=Name,Value=Udapeople-production-${CIRCLE_WORKFLOW_ID:0:7}
+        - persist_to_workspace:
+            root: .circleci/ansible/
+            paths:
+              - originalWorkflowID.txt
+#      - destroy-environment:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+#      - revert-migrations
+
             
       
     #   - revert-migrations
