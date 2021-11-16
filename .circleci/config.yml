@@ -680,11 +680,11 @@ workflows:
             branches:
               only: [master]
            
-      # # - cloudfront-update:
-      # #     requires: [smoke-test]
-      #     filters:
-      #         branches:
-      #           only: [master]
+      - cloudfront-update:
+          requires: [smoke-test]
+          filters:
+              branches:
+                only: [master]
       # # - cleanup:
       # #     requires: [cloudfront-update] 
       #     filters:
