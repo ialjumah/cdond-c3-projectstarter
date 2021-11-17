@@ -675,10 +675,11 @@ workflows:
             branches:
               only: [master]
       - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
-          filters:
-            branches:
-              only: [master]
+           requires: [deploy-backend]
+      #, deploy-frontend]
+           filters:
+             branches:
+               only: [master]
            
       - cloudfront-update:
           requires: [smoke-test]
